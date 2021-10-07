@@ -171,6 +171,18 @@ install_XrayR() {
     if [[ ! -f /etc/XrayR/custom_outbound.json ]]; then
         cp custom_outbound.json /etc/XrayR/
     fi
+    
+    nodeId=${NODE_ID:-1}
+    nodeKey=${NODE_KEY:-""}
+    webApi=${WEB_API:-"http或https://面板地址"}
+
+    webApi=`perl -ne 'print quotemeta($_)' <<< $webApi`
+    webApi=${webApi::-1}
+
+    sed -i "s/NODE_ID/${nodeId}/g" /etc/XrayR/config.yml
+    sed -i "s/NODE_KEY/${nodeKey}/g" /etc/XrayR/config.yml
+    sed -i "s/WEB_API/${webApi}/g" /etc/XrayR/config.yml
+    
     curl -o /usr/bin/XrayR -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/XrayR.sh
     chmod +x /usr/bin/XrayR
     ln -s /usr/bin/XrayR /usr/bin/xrayr # 小写兼容
